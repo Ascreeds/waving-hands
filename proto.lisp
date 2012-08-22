@@ -1,8 +1,23 @@
-(defclass monster ()
-  ((life :initarg :life :reader monster-life)
-   (damages :initform 0 :accessor monster-dmg)
-   (name :initarg :name :reader monster-name)))
+(defclass creature ()
+  ((life :initarg :life :reader creature-life)
+   (damages :initform 0 :accessor creature-dmg)
+   (name :initarg :name :reader creature-name)))
 
-(defmethod print-object ((object monster) stream)
+(defmethod print-object ((object creature) stream)
   (print-unreadable-object (object stream :type t :identity t)
-    (format stream "~a: ~a/~a" (monster-name object) (monster-dmg object) (monster-life object))))
+    (format stream "~a: ~a/~a" (creature-name object) (creature-dmg object) (creature-life object))))
+
+(defclass wizard (creature)
+  ((right-hand :initform nil :accessor wiz-right)
+   (left-hand :initform nil :accessor wiz-left)
+   (effects :initform nil :accessor wiz-effects)
+   (control :initform nil :accessor wiz-ctrl))
+  (:default-initargs :life 15))
+
+(defgeneric creature-element (object))
+
+(defmethod creature-element (object)
+  nil)
+
+(defclass elemental (creature)
+  ((element :initarg :element :reader creature-element))
