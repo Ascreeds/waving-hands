@@ -20,4 +20,10 @@
   nil)
 
 (defclass elemental (creature)
-  ((element :initarg :element :reader creature-element))
+  ((element :initarg :element :reader creature-element)))
+
+
+(define-test element
+  (assert-false (creature-element (make-instance 'creature)))
+  (assert-false (creature-element (make-instance 'wizard)))
+  (assert-equal "Foo" (creature-element (make-instance 'elemental :element "Foo"))))
