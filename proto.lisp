@@ -27,3 +27,8 @@
   (assert-false (creature-element (make-instance 'creature)))
   (assert-false (creature-element (make-instance 'wizard)))
   (assert-equal "Foo" (creature-element (make-instance 'elemental :element "Foo"))))
+
+
+(defclass game ()
+  ((players :initarg :players :accessor players)
+   (spells :initarg :spells :reader spells)))
