@@ -41,3 +41,27 @@ Trie data structure
 	    (if remaining-tries
 		(rec (first remaining-tries) (rest remaining-tries)))))))
     (princ "}" dot)))
+
+(defun assoc->trie (alist)
+  (let ((trie (trie-init)))
+    (let@ rec ((alist alist))
+      (if alist
+	  (progn
+	    (trie-insert trie (caar alist) (cdar alist))
+	    (rec (rest alist)))
+	  trie))))
+
+(defun hash->trie (hash-table)
+  (let ((trie (trie-init)))
+    (maphash (lambda (key value) (trie-insert trie key value))
+	     hash-table)
+    trie))
+
+(defun trie-locate (trie key)
+  (let@ rec ((trie trie)
+	     (key (map 'list #'identity key)))
+    (if key
+	(cif next (find (first key) (trie-children trie) :key #'car)
+	     (rec (cdr next) (rest key))
+	     nil)
+	trie)))
