@@ -45,8 +45,9 @@ stored and when no value has ever been stored for a given key.
 		(rec (first remaining-tries) (rest remaining-tries)))))))
     (princ "}" dot)))
 
-(defun assoc->trie (alist)
-  (let ((trie (trie-init)))
+
+(defun assoc->trie (alist &optional base-trie)
+  (let ((trie (if base-trie base-trie (trie-init))))
     (let@ rec ((alist alist))
       (if alist
 	  (progn
@@ -54,8 +55,15 @@ stored and when no value has ever been stored for a given key.
 	    (rec (rest alist)))
 	  trie))))
 
-(defun hash->trie (hash-table)
-  (let ((trie (trie-init)))
+(defun trie-merge-assocs (trie &rest assocs)
+  (let@ rec ((trie (if trie trie (trie-init)))
+	     (assocs assocs))
+    (if assocs
+	(rec (assoc->trie (first assocs) trie) (rest assocs))
+	trie)))
+
+(defun hash->trie (hash-table &optional base-trie)
+  (let ((trie (if base-trie base-trie (trie-init))))
     (maphash (lambda (key value) (trie-insert trie key value))
 	     hash-table)
     trie))
