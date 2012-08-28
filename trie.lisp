@@ -2,6 +2,9 @@
 
 Trie data structure
 
+TODO: This version is not able to differentiate when NIL has been
+stored and when no value has ever been stored for a given key.
+
 |#
 
 (defclass trie ()
@@ -65,3 +68,7 @@ Trie data structure
 	     (rec (cdr next) (rest key))
 	     nil)
 	trie)))
+
+(defun trie-get (trie key)
+  (if-let (sub-trie (trie-locate trie key))
+    (trie-value sub-trie)))
